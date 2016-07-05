@@ -1,0 +1,38 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+	static int maxProfit(vector<int>& prices) {
+		// 暴力枚举 O(N2)
+		// 将暴力枚举方法中间做缓存，改为动态规划O(N)
+		int L = prices.size();
+		if (L < 2) return 0;
+		vector<int> l2r(L, 0);
+		vector<int> r2l(L, 0);
+		int curMinl2r = prices[0];
+		int curMaxr2l = prices[L - 1];
+		int maxProfit = 0;
+		for (int i = 1; i < L; i++)
+		{
+			curMinl2r = min(curMinl2r, prices[i]);
+			l2r[i] = max(l2r[i-1], prices[i]- curMinl2r);
+			curMaxr2l = max(curMaxr2l, prices[L-1-i]);
+			r2l[L-1-i] = min(r2l[L-i], prices[L-1-i] - curMaxr2l);
+		}
+		for (int i = 0; i < L; i++)
+		{
+			maxProfit = max(maxProfit, l2r[i] - r2l[i]);
+		}
+		return maxProfit;
+	}
+};
+int main()
+{
+	vector<int> prices = {7,6,4,3,1};
+	cout << Solution::maxProfit(prices) << endl;	
+	system("pause");
+	return 0;
+}
