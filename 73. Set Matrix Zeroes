@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+	static void setZeroes(vector<vector<int>>& matrix) {
+		// m * n
+		int n = matrix.size();
+		int m = matrix[0].size();
+		vector<bool> hasZeroRow(m, false);
+		vector<bool> hasZeroCol(n, false);
+		for (int i = 0; i < m; i++){
+			for (int j = 0; j < n; j++){
+				if (matrix[j][i] == 0){
+					hasZeroRow[i] = true;
+					break;
+				}				
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (matrix[i][j] == 0){
+					hasZeroCol[i] = true;
+					break;
+				}
+			}
+		}
+		for (int i = 0; i < n; i++){
+			if (hasZeroCol[i]){
+				for (int j = 0; j < m; j++){
+					matrix[i][j] = 0;
+				}
+			}
+		}
+		for (int i = 0; i < m; i++) {
+			if (hasZeroRow[i]){
+				for (int j = 0; j < n; j++) {
+					matrix[j][i] = 0;
+				}
+			}
+		}
+	}
+};
+
+int main()
+{
+	vector<vector<int>> matrix;
+	vector<int> c1 = {1, 0};
+	matrix.push_back(c1);
+	Solution::setZeroes(matrix);
+	system("pause");
+	return 0;
+}
