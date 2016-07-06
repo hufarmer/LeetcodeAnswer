@@ -1,0 +1,54 @@
+#include <iostream>
+struct RandomListNode {
+	int label;
+	RandomListNode *next, *random;
+	RandomListNode(int x) : label(x), next(NULL), random(NULL) {}	
+};
+
+class Solution {
+public:
+	static RandomListNode *copyRandomList(RandomListNode *head) {
+
+		// http://www.2cto.com/kf/201310/253477.html
+		// O(N)
+		if (head == nullptr) return nullptr;
+		RandomListNode* cur = head;
+		RandomListNode* res;
+		do{
+			RandomListNode* gen = new RandomListNode(cur->label);
+			gen->next = cur->next;
+			cur->next = gen;
+			cur = gen->next;
+		} while (cur != nullptr);
+		cur = head;
+		res = head->next;
+		RandomListNode* temp;
+		do{
+			if (cur->random != nullptr)
+				cur->next->random = cur->random->next;
+
+			cur = cur->next->next;
+		} while (cur != nullptr);
+		cur = head;
+		do{
+			temp = cur;
+			cur = cur->next->next;
+			if (cur != nullptr)
+			{	
+				temp->next->next = cur->next;
+				temp->next = cur;
+			}
+			else
+			{
+				temp->next = nullptr;
+			}
+		} while (cur != nullptr);
+		return res;
+	}
+};
+
+int main()
+{
+	system("pause");
+	return 0;
+}
