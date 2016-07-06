@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+struct TreeNode {
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+class Solution {
+public:
+	bool tag;
+	bool theFirst;
+	TreeNode* n1;
+	TreeNode* n2;
+	TreeNode* first;
+	TreeNode* second;
+	TreeNode* third;
+	TreeNode* fourth;
+	void recoverTree(TreeNode* root) {
+		theFirst = true;
+		tag = false;  // true, 赋值n1; flase, 赋值n2;
+		VistiTree(root);
+		if (fourth != nullptr)
+			second = fourth;
+		int temp = first->val;
+		first->val = second->val;
+		second->val = temp;
+	}
+	void VistiTree(TreeNode* root) {
+		if (root == nullptr)
+			return;
+		VistiTree(root->left);
+		if (tag){
+			n1 = root;
+			tag = !tag;
+			if (  n1->val < n2->val  ){
+				if (theFirst){
+					first = n2;
+					second = n1;
+					theFirst = false;
+				}else{
+					fourth = n1;
+					third = n2;
+				}				
+			}
+		}else {
+			n2 = root;
+			tag = !tag;
+			if ( n1 != nullptr && n2->val < n1->val ){
+				if (theFirst) {
+					first = n1;
+					second = n2;
+					theFirst = false;
+				}else {
+					fourth = n2;
+					third = n1;
+				}
+			}
+		}
+		VistiTree(root->right);
+	}
+};
+int main()
+{
+	system("pause");
+	return 0;
+}
