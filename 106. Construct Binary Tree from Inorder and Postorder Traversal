@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct TreeNode {
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution {
+public:
+	TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+		if (postorder.size() == 0) return nullptr;
+		TreeNode *root = build2Tree(postorder, inorder, 0, inorder.size()-1, postorder.size()-1);
+		return root;
+	}
+
+	TreeNode* build2Tree(vector<int>& postorder, vector<int>& inorder, int begin, int end, int post_rootPos)
+	{
+		TreeNode *root = new TreeNode(postorder[post_rootPos]);
+		int i;
+		for ( i = begin; i <= end; i++){
+			if (postorder[post_rootPos] == inorder[i] ){
+				break;
+			}
+		}
+		if (begin <= i - 1){
+			TreeNode *left = build2Tree(postorder, inorder, begin, i - 1, post_rootPos-end+i-1  );
+			root->left = left;
+		}
+		if (i + 1 <= end){
+			TreeNode *right = build2Tree(postorder, inorder, i + 1, end, post_rootPos - 1);
+			root->right = right;
+		}
+		return root;
+	}
+};
+
+int main()
+{
+	system("pause");
+	return 0;
+}
