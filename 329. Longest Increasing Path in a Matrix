@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+
+	int n;
+	int m;
+	vector<vector<int>> record;
+
+	int longestIncreasingPath(vector<vector<int>>& matrix) {
+
+		if (matrix.size() == 0) return 0;
+
+		int Max = 0;
+		// m*n
+		n = matrix[0].size();
+		m = matrix.size();
+		record.resize(m);
+		for (int i = 0; i < m; i++)
+		{
+			record[i].resize(n, -1);
+		}
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				// every element
+				Max = max(Max, getPathLength(i, j, matrix));
+			}
+		}
+		return Max+1;
+	}
+	int getPathLength(int i, int j, vector<vector<int>>& matrix)
+	{
+		if (record[i][j] != -1)
+			return record[i][j];
+		int Max = 0;
+		// up
+		if (i > 0)
+			Max = max(Max,  (matrix[i][j] < matrix[i - 1][j]) ? (1+ getPathLength(i - 1, j, matrix)) : 0);
+		// down
+		if (i<m-1)
+			Max = max(Max, (matrix[i][j] < matrix[i + 1][j]) ? (1 + getPathLength(i + 1, j, matrix)) : 0);
+		// left
+		if (j>0)
+			Max = max(Max, (matrix[i][j] < matrix[i][j-1]) ? (1 + getPathLength(i, j-1, matrix)) : 0);
+		// right
+		if (j<n-1)
+			Max = max(Max, (matrix[i][j] < matrix[i][j+1]) ? (1 + getPathLength(i, j+1, matrix)) : 0);
+
+		record[i][j] = Max;
+		return Max;
+	}
+};
+
+int main()
+{
+	vector<vector<int>> matrix = { {9,9,4},{6,6,8},{2,1,1} };
+	Solution s;
+	cout << s.longestIncreasingPath(matrix) << endl;
+	
+
+	system("pause");
+	return 0;
+}
