@@ -1,0 +1,96 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+/*
+	"0" => true
+	"0.1 " => true
+	"abc" => false
+	"1 a" => false
+	"2e10" => true
+	"3.0" =>　true
+	"01" => true
+	"." =>false
+	".." =>false
+	"3.e02" =>true
+*/
+class Solution {
+public:
+	bool isNumber(string s) {
+
+		int begin = 0, end = s.length() - 1;
+		while (s[begin] == ' ')
+			begin++;
+		while (s[end] == ' ')
+			end--;
+		if (begin > end) return false;
+
+		int Epos = begin;
+		do
+		{
+			Epos++;
+		} while (Epos <= end && s[Epos] != 'e');
+
+		if (Epos > end)
+			return isNumberPart1(s, begin, end);
+		else 
+			return isNumberPart1(s, begin, Epos - 1) && isNumberPart2(s, Epos + 1, end);
+
+	}
+	bool isNumberPart1(string& s, int begin, int end)
+	{
+		if (begin > end) return false;
+		int cur = begin;
+		if (s[cur] == '+' || s[cur] == '-') cur++;
+		if (cur > end) return false;
+
+		bool hasPoint = false;
+		bool beginPoint = true;
+		
+		for (; cur <= end; cur++)
+		{
+			char c = s[cur];
+			if (c == '.')
+			{
+				if (hasPoint) return false;
+				if (beginPoint && cur == end) return false;
+				hasPoint = true;
+			}
+			else if (c > 47 && c < 58)
+			{
+				if (beginPoint == true)
+					beginPoint = false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return true;
+
+	}
+	bool isNumberPart2(string &s, int begin ,int end)
+	{
+		if (begin > end) return false;
+		int cur = begin;
+		if (s[cur] == '+' || s[cur] == '-') cur++;
+		if (cur > end) return false;
+
+		for (; cur <= end; cur++)
+		{
+			char c = s[cur];
+			if (c<48 || c>57)
+				return false;
+		}
+		return true;
+	}
+
+};
+
+int main()
+{
+	Solution a;
+	cout << a.isNumber("0") << endl;
+
+	system("pause");
+	return 0;
+}
