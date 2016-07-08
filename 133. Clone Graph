@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <map>
+using namespace std;
+struct UndirectedGraphNode {
+	int label;
+	vector<UndirectedGraphNode*> neighbors;
+	UndirectedGraphNode(int x) : label(x) {};
+};
+class Solution {
+public:
+	UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+
+		if (node == nullptr) return nullptr;
+
+		map<UndirectedGraphNode*, UndirectedGraphNode*> m1;
+		map<UndirectedGraphNode*, bool> m2;
+		queue<UndirectedGraphNode*> q;
+
+		q.push(node);
+		UndirectedGraphNode* root = new UndirectedGraphNode(node->label);
+		m1.insert(make_pair(node, root));
+		m2.insert(make_pair(node,true));
+
+		while (!q.empty())
+		{
+			UndirectedGraphNode *cur = q.front();
+			q.pop();
+
+			UndirectedGraphNode *temp;
+			UndirectedGraphNode *nbr;
+			for (int i = 0; i < cur->neighbors.size(); i++)
+			{
+				nbr = cur->neighbors[i];
+				if ( m2.find(nbr) != m2.end() )
+				{
+					m1[cur]->neighbors.push_back(m1[nbr]);
+				}
+				else
+				{
+					temp = new UndirectedGraphNode(nbr->label);
+					m1[cur]->neighbors.push_back(temp);
+					m1.insert(make_pair(nbr, temp));
+					m2.insert(make_pair(nbr, true));
+					q.push(cur->neighbors[i]);
+				}
+			}
+		}
+		return root;
+	}
+};
+int main()
+{
+	Solution a;
+	system("pause");
+	return 0;
+}
