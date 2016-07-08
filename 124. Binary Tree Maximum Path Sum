@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct TreeNode {
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+class Solution {
+public:
+	int maxLength;
+	int maxPathSum(TreeNode* root) {
+		if (root == nullptr) return 0;
+		maxLength = INT_MIN;
+		return max(maxLength, dfs(root));
+	}
+	int dfs(TreeNode* root)
+	{
+		int left = (root->left == nullptr) ? 0 : dfs(root->left);
+		int right = (root->right == nullptr) ? 0 : dfs(root->right);
+		int L1 = max(0, max(left, right)) + root->val;
+		int L2 = left + right + root->val;
+		maxLength = max(maxLength, max(L1, L2));
+		return L1;
+	}
+};
+int main()
+{
+	Solution a;
+	system("pause");
+	return 0;
+}
