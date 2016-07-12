@@ -1,0 +1,40 @@
+class Solution {
+public:
+	string addBinary(string a, string b) {
+
+		int la = a.size();
+		int lb = b.size();
+		if (la < lb) return addBinary(b, a);
+		string pad(la - lb, '0');
+		b = pad + b;
+		int carry = 0, sum;
+		string res(la, 0);
+		for (int i = la - 1; i >= 0; i--)
+		{
+			sum = a[i]-'0' + b[i]-'0' + carry;
+			if (sum == 0)
+			{
+				carry = 0;
+				res[i] = '0';
+			}
+			else if (sum == 1)
+			{
+				carry = 0;
+				res[i] = '1';
+			}
+			else if (sum == 2)
+			{
+				carry = 1;
+				res[i] = '0';
+			}
+			else if (sum == 3)
+			{
+				carry = 1;
+				res[i] = '1';
+			}
+		}
+		if (carry != 0)
+			res = "1" + res;
+        return res;
+	}
+};
