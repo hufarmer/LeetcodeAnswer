@@ -1,0 +1,20 @@
+class Solution {
+public:
+	int mySqrt(int x) {
+
+		if (x<0) return -1;
+
+		long long a = 0, b = x / 2 + 1;
+		while (a < b-1)
+		{
+			long long c = (a + b) / 2;
+			if (c*c >= x)
+				b = c;
+			else
+				a = c;
+		}
+
+		if (b*b == x) return b;
+		return a;
+	}
+};
