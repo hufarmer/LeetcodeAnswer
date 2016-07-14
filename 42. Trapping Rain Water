@@ -1,0 +1,31 @@
+class Solution {
+	public:
+	int trap(vector<int>& height) {
+
+		int n = height.size();
+		if (n == 0) return 0;
+		int maxPos = 0;
+		for (int i = 0; i < n; i++)
+		{
+			maxPos = (height[maxPos] > height[i]) ? maxPos : i;
+		}
+		int sum = 0;
+		int curMax = 0;
+		for (int i = 0; i < maxPos; i++)
+		{
+			if (height[i] < height[curMax])
+				sum += (height[curMax] - height[i]);
+			else
+				curMax = i;
+		}
+		curMax = n - 1;
+		for (int i = curMax; i >maxPos; i--)
+		{
+			if (height[i] < height[curMax])
+				sum += (height[curMax] - height[i]);
+			else
+				curMax = i;
+		}
+		return sum;
+	}
+};
