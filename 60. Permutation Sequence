@@ -1,0 +1,47 @@
+class Solution {
+public:
+
+	vector<bool> rec;
+
+	int getNumber(int k, int t)
+	{
+		int i = 0;
+		int p = k / t + (k%t!=0);
+		while (p)
+		{
+			if (rec[i] == true)
+				p--;
+			i++;
+		}
+		rec[i - 1] = false;
+		return i;
+	}
+
+	string getPermutation(int n, int k) {
+
+		if (n == 1 && k == 1) return "1";
+
+		rec.resize(n);
+		for (int i = 0; i < n; i++)	
+			rec[i] = true;
+
+		string res;
+		for (int i = n-1; i >= 0; i--)
+		{
+			int t = factorial(i);
+			int value = getNumber(k, t);
+			char temp[2];
+			sprintf_s(temp,2, "%d", value);
+			res = res + string(temp);
+			k = k%t;
+			if (k == 0) k = t;
+		}
+		return res;
+	}
+
+	int factorial(int a)
+	{
+		if (a == 0)  return 1;
+		return a*factorial(a - 1);
+	}
+};
