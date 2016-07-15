@@ -1,0 +1,47 @@
+class Solution {
+public:
+
+	string GetToken(string & s, int & cur)
+	{
+		string res = "";
+		while (s[cur] == '/' && cur<s.length())
+			cur++;
+		if (cur == s.length()) return res;
+		while (s[cur] != '/' && cur < s.length())
+		{
+			res = res + s[cur];
+			cur++;
+		}
+		return res;
+	}
+
+	string simplifyPath(string path) {
+
+		int l = path.length();
+		stack<string> stack;
+		int cur = 0;
+		while (cur < l)
+		{
+			string s = GetToken(path, cur);
+			if (s == "..")
+			{
+				if (!stack.empty())
+					stack.pop();
+			}
+			else if (s == "")
+				break;
+			else if (s != ".")
+				stack.push(s);
+		}
+		// 处理 s;
+		if (stack.empty()) return "/";
+		string res = "";
+		while (!stack.empty())
+		{
+			string s = stack.top();
+			stack.pop();
+			res = "/" + s + res;
+		}
+		return res;
+	}
+};
